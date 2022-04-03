@@ -150,25 +150,25 @@ function Tiles_AdjacentBonusCheck(tile)
     if(closedTiles.length == 0){ return true; }
     
     // Check Right Tile
-    if((oData[id+1] == oData[id] + 2 || oData[id+1] == oData[id] - 2) && oData[id+1] != 0 && ((id+1) % 5) != 0 && document.getElementById("tile_" + (id+1)).classList.contains("tile"))
+    if((oData[id+1] == oData[id] + 2 || oData[id+1] == oData[id] - 2) && oData[id+1] != boardSize-1 && ((id+1) % 5) != 0 && document.getElementById("tile_" + (id+1)).classList.contains("tile"))
     {
         Tiles_Click(document.getElementById("tile_" + (id+1)), false, true);
     }
 
     // Check Left Tile
-    if((oData[id-1] == oData[id] + 2 || oData[id-1] == oData[id] - 2) && oData[id-1] != 0 && (id % 5) != 0 && document.getElementById("tile_" + (id-1)).classList.contains("tile"))
+    if((oData[id-1] == oData[id] + 2 || oData[id-1] == oData[id] - 2) && oData[id-1] != boardSize-1 && (id % 5) != 0 && document.getElementById("tile_" + (id-1)).classList.contains("tile"))
     {
         Tiles_Click(document.getElementById("tile_" + (id-1)), false, true);
     }
 
     // Check Above Tile
-    if((oData[id-5] == oData[id] + 2 || oData[id-5] == oData[id] - 2) && oData[id-5] != 0 && document.getElementById("tile_" + (id-5)).classList.contains("tile"))
+    if((oData[id-5] == oData[id] + 2 || oData[id-5] == oData[id] - 2) && oData[id-5] != boardSize-1 && document.getElementById("tile_" + (id-5)).classList.contains("tile"))
     {
         Tiles_Click(document.getElementById("tile_" + (id-5)), false, true);
     }
 
     // Check Below Tile
-    if((oData[id+5] == oData[id] + 2 || oData[id+5] == oData[id] - 2) && oData[id+5] != 0 && document.getElementById("tile_" + (id+5)).classList.contains("tile"))
+    if((oData[id+5] == oData[id] + 2 || oData[id+5] == oData[id] - 2) && oData[id+5] != boardSize-1 && document.getElementById("tile_" + (id+5)).classList.contains("tile"))
     {
         Tiles_Click(document.getElementById("tile_" + (id+5)), false, true);
     }
