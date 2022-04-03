@@ -1,0 +1,294 @@
+:root
+{
+    --body-text: #000000;
+    --game-background: #ffffff;
+    --game-body: #fcfcfc;
+    --game-border: #afafaf;
+    --game-width: 44rem;
+    /* --tile-blank: #cfcfcf; */
+    --tile-blank: #a9ffdb;
+    --game-text: #000000;
+    --tiles-box-shadow-a: rgba(255,255,255, .46);
+    --tiles-box-shadow-b: rgba(0,0,0, .26);
+    --tiles-box-shadow: inset 1px 1px 1px 1px var(--tiles-box-shadow-a), inset -1px -1px 1px 1px var(--tiles-box-shadow-b);
+    --tiles-border: rgba(0, 0, 0, 0.65);
+    --tiles-text-color: #000000;
+    --tiles-highlight: rgba(91, 181, 255, 0.904);
+    --tile-open-zero: rgba(255,0,0,.7);
+    --tile-hover: #ffa500;
+    --button-text-color: #000000;
+    --icons-hover: #ffa500;
+    --icons-hover-disabled: #d4d4d4;    
+}
+
+html
+{
+    height: 100%;
+    box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after
+{
+    box-sizing: inherit;
+}
+
+body 
+{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+	font-size: 0.8em;
+	background-color: var(--game-body);
+	/* min-height: 100%; */
+	position: relative;
+	margin: 0;
+    color: var(--body-text);
+}
+
+.hidden
+{
+    display: none;
+}
+
+div.game
+{
+    margin: 1rem auto;
+    background-color: var(--game-background); 
+    border: 1px solid var(--game-border);
+    border-radius: 10px;
+    width: var(--game-width);
+    color: var(--game-text);
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.55);
+}
+
+div.title
+{
+    text-align: center;
+    font-weight: 700;
+    font-size: 3rem;
+    margin: 1rem auto;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+    animation: 2s anim-flipX ease 1;
+    -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: black;
+}
+
+div.board
+{
+    font-family: "Lucida Console", Courier, monospace;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    background-color: var(--game-background);
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */   
+    color: inherit;
+}
+
+div.score
+{
+    font-family: "Lucida Console", Courier, monospace;
+    width: 10rem;
+    margin: 0rem auto;
+    text-align: center;
+    font-weight: 700;
+    /* margin-bottom: 1rem; */
+    font-size: 2rem;
+    border: 2px solid var(--game-border);
+    border-radius: 10px;
+    padding: .5rem;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+}
+
+div.controls
+{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    text-align: center;
+    font-weight: 500;
+    font-size: 2rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+}
+
+div.footer
+{
+    width: var(--game-width);
+    text-align: center;
+    padding: .5rem;
+    font-size: .75rem;
+    margin: auto;
+    /* border-top: 1px solid rgba(125,125,125, .55); */
+}
+
+div.footer a
+{
+    color: #0000ff;
+    text-decoration: none;
+}
+
+div.footer a:visited
+{
+    color: #0000ff;
+}
+
+div.footer a:hover
+{
+    color: #d40000;
+    text-decoration: underline;
+}
+
+div.tile
+{
+    background-color: var(--game-tiles-background);
+    width: 4rem;
+    margin: .5rem;
+    text-align: center;
+    line-height: 4rem;
+    font-size: 2rem;
+    box-shadow: var(--tiles-box-shadow);
+    border: 1px solid var(--tiles-border);
+    border-radius: .25rem;
+    text-shadow: 2px 2px 4px var(--game-border);
+    cursor: pointer;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+    color: var(--tiles-text-color);
+    transition: .5s ease;
+}
+
+div.tile:hover
+{
+    -webkit-transform: rotateZ(-10deg);
+    -ms-transform: rotateZ(-10deg);
+    transform: rotateZ(-10deg);
+    transition: .5s ease;
+    background-color: var(--tile-hover);
+}
+
+div.tile_open
+{
+    position: relative;
+    background-color: var(--tile-blank);
+    width: 4rem;
+    margin: .5rem;
+    text-align: center;
+    line-height: 4rem;
+    font-size: 2rem;
+    border: 1px solid rgba(0, 0, 0, 0.65);
+    border-radius: 50%;
+    transition:all 1s;
+    -webkit-transition:all 1s;
+    -moz-transition:all 1s;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+    color: inherit;
+}
+
+div.tile_open_zero::before
+{
+    content: "X";
+    color: var(--tile-open-zero);
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    font-size: 4rem;
+    font-weight: 300;
+}
+
+div.tile_highlight
+{
+    background-color: var(--tiles-highlight);
+    animation: side-shake 1s linear;
+    animation-iteration-count: 3;
+}
+
+div.icons
+{
+    font-size: 4rem;
+    cursor: pointer;
+    transition: .5s ease;
+    text-shadow: 2px 2px 2px rgba(155, 155, 155, 0.65);
+}
+
+div.icons_disabled
+{
+    color:rgba(100, 100, 100, 0.65);
+}
+
+div.icons:hover
+{
+    text-shadow: 2px 2px 2px var(--icons-hover);
+    -webkit-transform: rotateZ(-20deg);
+    -ms-transform: rotateZ(-20deg);
+    transform: rotateZ(-20deg);
+    transition: .5s ease;
+}
+
+div.icons_disabled:hover
+{
+    text-shadow: 2px 2px 2px var(--icons-hover-disabled);
+    cursor: not-allowed;
+}
+
+@keyframes side-shake
+{
+    10%, 90%
+    {
+        transform: translate(-1px,0);
+    }
+
+    20%, 80%
+    {
+        transform: translate(2px,0);
+    }
+
+    30%, 50%, 70%
+    {
+        transform: translate(-4px,0);
+    }
+
+    40%, 60%
+    {
+        transform: translate(4px,0);
+    }
+}
+
+@keyframes anim-flipX 
+{
+    0% {
+        opacity: 0;
+        transform: rotateX(90def);
+    }
+    50% {
+        opacity: 1;
+        transform: rotateX(720deg);
+    }
+    100% {
+        /* animate nothing to pause animation at the end */
+        opacity: 1;
+        transform: rotateX(720deg);
+    }
+}
+  

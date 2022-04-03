@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Numerus Maximus - LD50</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="css/game.css"/>
+        <script src="scripts/spDialog.min.js" defer></script>
+        <script src="scripts/game.js" defer></script>
+        <!--
+            NOTE: spDialog is available free to use to all with full source code available on my GitHub at:
+            https://github.com/SimplePotential/spDialog
+
+            Additional documentation at: https://simplepotential.github.io/spDialog/
+
+            It is still a work in progress but perfectly usable.
+        -->
+	</head>
+	<body onload="Init()">
+        <div id="game" class="game">
+            <div id="game-title" class="title" title="Latin for 'Last Number'">
+                Numerus Maximus
+            </div>
+            <div id="game-score" class="score" title="Your Score">
+                &nbsp;
+            </div>
+            <div id="game-board" class="board">
+
+            </div>
+            <div id="game-controls" class="controls">
+                <!-- <button id="btnPower-ShowZero" onclick="Tiles_ShowPossible()">Power: Highlight Zero</button> -->
+                <div class="material-icons icons" id="btnPower-ShowZero" title="Power: Highlight Possible Zero Tile" onclick="Tiles_ShowPossible()">bolt</div>
+                <div class="material-icons icons" id="btnHelp" title="Help!" onclick="ShowHelp()">help_outline</div>
+                <div class="material-icons icons" id="btnShare" title="View and Share Your Scores" onclick="ShowShare()">share</div>
+                <div class="material-icons icons" id="btnRestart" title="Restart Game" onclick="CheckRestartGame()">refresh</div>
+            </div>
+        </div>
+        <div id="footer" class="footer">
+            <a href="https://www.simplepotential.com" target="_blank">&copy; Simple Potential</a> | 
+            <a href="https://github.com/SimplePotential/NumerusMaximus" target="_blank">GitHub Source</a> | 
+            <a href="https://ldjam.com/events/ludum-dare/50/$285713" target="_blank">Ludum Dare Entry</a> | 
+            <a href="https://github.com/SimplePotential/spDialog" target="_blank">spDialog</a>
+        </div>
+        
+    </body>
+</html>
