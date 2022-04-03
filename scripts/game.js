@@ -86,7 +86,7 @@ function SetEvents()
     if(!documentEventListener_Set){ documentEventListener_Set = true; }
 }
 
-function Tiles_Click(tile, isZeroEffect = false)
+function Tiles_Click(tile, isZeroEffect = false, isAdjacentEffect = false)
 {
     if(!tile.classList.contains("tile_open") && !isGameOver)
     {
@@ -97,9 +97,14 @@ function Tiles_Click(tile, isZeroEffect = false)
         tile.classList.remove("tile_highlight");
         tile.innerHTML = value;
 
-        if(!isZeroEffect)
+        if(!isZeroEffect && !isAdjacentEffect)
         {
             Tiles_Check(tile); 
+        }
+        else if(!isZeroEffect && isAdjacentEffect)
+        {
+            //RefreshScore(value);
+            Tiles_Check(tile, true); 
         }
         else
         {
@@ -109,7 +114,7 @@ function Tiles_Click(tile, isZeroEffect = false)
     }
 }
 
-function Tiles_Check(tile)
+function Tiles_Check(tile, isAdjacentEffect = false)
 {
     let value = oData[tile.dataset.pid];
     
@@ -119,17 +124,54 @@ function Tiles_Check(tile)
         SetGameOver();
     }
 
-    if(value == 0)
+    if(!isAdjacentEffect)
     {
-        // Call to clear random tiles that haven't been cleared yet, their scores are cleared.
-        isZeroFound = true;
-        oPower_ShowZero.classList.add("icons_disabled");
-        Tiles_FoundZero();
+        if(value == 0)
+        {
+            // Call to clear random tiles that haven't been cleared yet, their scores are cleared.
+            isZeroFound = true;
+            oPower_ShowZero.classList.add("icons_disabled");
+            Tiles_FoundZero();
+        }
+    
+        Tiles_AdjacentBonusCheck(tile);
     }
 
     // Any other value is simply scored.
     RefreshScore(value);
 
+}
+
+function Tiles_AdjacentBonusCheck(tile)
+{
+    let id = tile.dataset.pid;
+    let closedTiles = oBoard.querySelectorAll("div > .tile");
+
+    if(closedTiles.length == 0){ return true; }
+    
+    // Check Right Tile
+    if((oData[id+1] == oData[id] + 2 || oData[id+1] == oData[id] - 2) && oData[id+1] != 0 && ((id+1) % 5) != 0 && document.getElementById("tile_" + (id+1)).classList.contains("tile"))
+    {
+        Tiles_Click(document.getElementById("tile_" + (id+1)), false, true);
+    }
+
+    // Check Left Tile
+    if((oData[id-1] == oData[id] + 2 || oData[id-1] == oData[id] - 2) && oData[id-1] != 0 && (id % 5) != 0 && document.getElementById("tile_" + (id-1)).classList.contains("tile"))
+    {
+        Tiles_Click(document.getElementById("tile_" + (id-1)), false, true);
+    }
+
+    // Check Above Tile
+    if((oData[id-5] == oData[id] + 2 || oData[id-5] == oData[id] - 2) && oData[id-5] != 0 && document.getElementById("tile_" + (id-5)).classList.contains("tile"))
+    {
+        Tiles_Click(document.getElementById("tile_" + (id-5)), false, true);
+    }
+
+    // Check Below Tile
+    if((oData[id+5] == oData[id] + 2 || oData[id+5] == oData[id] - 2) && oData[id+5] != 0 && document.getElementById("tile_" + (id+5)).classList.contains("tile"))
+    {
+        Tiles_Click(document.getElementById("tile_" + (id+5)), false, true);
+    }
 }
 
 function Tiles_FoundZero()
@@ -304,8 +346,9 @@ function CreateHelpDialog()
         Avoid finding 0.  Finding 0 will result in ${zeroEffect} tiles being opened but not scoring.<br/><br/>
         Use the <span class="material-icons">bolt</span> power up to highlight ${maxPossibles} tiles, one of which is the 0.  The other two are safe tiles.  
         This potentially gives you a lot of information about the game board.  You can use it early or save it for later but there must be at least ${maxPossibles} tiles to open.<br/><br/>
-        The tile above, below, to the right, and to the left will never be consecutive.  So if you expose a tile with a 5, adjacent tiles will not be a 4 or a 6.  Note that diagonal tiles could be.<br/><br/>
-        Tiles you expose will be scored.<br/><br/>
+        The tile above, below, to the right, and to the left will never be consecutive.  So if you open a tile with a 5, adjacent tiles will not be a 4 or a 6.  Note that diagonal tiles could be.<br/><br/>
+        If you select a tile and the adjacent tile is within 2 value points of the one you selected, it will be opened and scored.  So if you open a tile with a value of 5 and the tile adjacent to it is 3 or 7, they will open up.
+        Tiles you open will be scored.<br/><br/>
         What does <i>Numerus Maximus</i> mean?  In Latin, it means <i>Maximum Number</i>.<br/><br/>
         This is was a Ludum Dare #50 Entry.
     `;
@@ -316,7 +359,7 @@ function CreateHelpDialog()
         textBody: txtHelp,
         dialogFontSize: "1rem",
         dialogWidth: "50%",
-        dialogHeight: "35%"
+        dialogHeight: "40%"
     }
 
     dlgHelp = new spDialog(params);
