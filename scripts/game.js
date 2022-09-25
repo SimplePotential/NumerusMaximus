@@ -7,6 +7,7 @@ let oPower_ShowZero = document.getElementById("btnPower-ShowZero"); // The Show 
 let oHelp = document.getElementById("btnHelp"); // The Show Zero power up button.
 let oShare = document.getElementById("btnShare"); // The Show Zero power up button.
 
+let cookieConsent = false; // Assume no consent until given.
 let boardSize = 25; // How many tiles will display.
 let oData = null; // Game array data.
 let documentEventListener_Set = false; // Allow for only adding events to document once (if necessary)
@@ -18,6 +19,7 @@ let isGameRecorded = false; // Is the game score recorded to localStorage alread
 let txtShare; // Data to share on social media.
 let score_PrevHigh = Score_GetHigh(); // Get the last high score for future use before it is potentially overwritten
 
+let dlgConsent = null;
 let dlgHelp = null;
 let dlgGameOver = null;
 let dlgResetGame = null;
@@ -25,6 +27,9 @@ let dlgResetGame = null;
 
 function Init()
 {
+    // Get user consent to use localStorage to save score.
+    CheckCookiesConsent();
+
     // Build game data
     GenerateGameData();
 
@@ -42,6 +47,24 @@ function Init()
 
     // Create Reset Game Confirmation
     CreateRestartGame();
+}
+
+function CheckCookiesConsent()
+{
+    // Has user previously consented?  If not we'll ask as if it is their first visit.
+    if(parseInt(localStorage.cookieConsentGiven) == 1)
+    {
+        cookieConsent = true;
+        return true;
+    }
+
+    // Create the Consent Dialog
+    CreateCookieConsentDialog();
+
+    // Ask user for consent to use localStorage
+    ShowCookieConsent();
+    
+    return true;
 }
 
 /*
@@ -337,6 +360,51 @@ function SetGameOver()
     setTimeout(() => { ShowShare() }, 1000);
 }
 
+function CreateCookieConsentDialog()
+{
+    let txtConsent;
+
+    txtConsent = `
+        We use localStorage to keep your high score, average score, and number of games played.  No personal information is stored.  localStorage is similar to a cookie and stored 
+        only on the device you playing on, your information is not stored on our server.  Review our <a href='https://simplepotential.com/privacy.html'>privacy policy</a> for more detail.
+        <br/><br/>
+        This game is still playable if you reject localStorage usage however your game settings will not be stored.
+    `;
+    
+
+    let params = {
+        textTitle: "This Game Uses localStorage",
+        textBody: txtConsent,
+        dialogFontSize: "1rem",
+        dialogWidth: "50%",
+        dialogHeight: "20%",
+        showAnswerCancel: false,
+        showAnswerFalse: true,
+        textAnswerTrue: "Accept",
+        textAnswerFalse: "Reject"
+    }
+
+    dlgConsent = new spDialog(params);
+    //dlgConsent.dialogTitle.style.height = "7%";
+    //dlgConsent.dialogBody.style.height = "73%";
+    dlgConsent.dialogBody.style.fontSize = ".75rem";
+}
+
+async function ShowCookieConsent()
+{
+    await dlgConsent.ShowDialog().then(result => {
+        if(dlgConsent.userResponse == 1)
+        {
+            cookieConsent = true;
+            localStorage.cookieConsentGiven = 1;
+        }
+        else
+        {
+            cookieConsent = false;
+        }
+    });
+}
+
 function CreateHelpDialog()
 {
     let txtHelp;
@@ -454,6 +522,8 @@ function CopyToClipboard(value)
 
 function SaveScores()
 {
+    if(!cookieConsent){ isGameRecorded = true; return true;}
+
     // Don't overwrite scores over and over
     if(isGameRecorded || !isGameOver){ return true; }
 
@@ -476,6 +546,8 @@ function SaveScores()
 
 function Score_GetHigh()
 {
+    if(!cookieConsent){ return 0; }
+
     if(localStorage.score_high)
     {
         return parseInt(localStorage.score_high);
@@ -488,6 +560,8 @@ function Score_GetHigh()
 
 function Score_GetGames()
 {
+    if(!cookieConsent){ return 0; }
+
     if(localStorage.score_games)
     {
         return parseInt(localStorage.score_games);
@@ -500,6 +574,8 @@ function Score_GetGames()
 
 function Score_GetAvg()
 {
+    if(!cookieConsent){ return 0; }
+
     if(localStorage.score_avg)
     {
         return parseFloat(localStorage.score_avg);
@@ -512,6 +588,8 @@ function Score_GetAvg()
 
 function Score_ResetAll()
 {
+    if(!cookieConsent){ return; }
+
     localStorage.score_games = 0;
     localStorage.score_avg = 0;
     localStorage.score_high = 0;
